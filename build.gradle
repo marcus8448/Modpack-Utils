@@ -6,16 +6,17 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 
 apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
+apply plugin: 'com.github.johnrengelman.shadow'
 
-version = '1.0'
-group = 'io.github.marcus8448.mods' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'PackUtils'
+version = '1.14.4-1.0.0.0'
+group = 'io.github.marcus8448.mods'
+archivesBaseName = 'ModpackUtils'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -30,7 +31,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                packutils {
+                modpackutils {
                     source sourceSets.main
                 }
             }
@@ -43,7 +44,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                packutils {
+                modpackutils {
                     source sourceSets.main
                 }
             }
@@ -58,17 +59,12 @@ minecraft {
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
 
             mods {
-                packutils {
+                modpackutils {
                     source sourceSets.main
                 }
             }
         }
     }
-}
-
-configurations {
-    shade
-    compile.extendsFrom shade
 }
 
 repositories {
@@ -82,43 +78,110 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.14.4-28.1.111'
 
-    shade "com.github.TheRandomLabs:CurseAPI:master-SNAPSHOT"
-    shade "com.github.TheRandomLabs:CurseAPI-Minecraft:master-SNAPSHOT"
+    implementation("com.squareup.moshi:moshi:1.9.2") {
+        transitive(false)
+    }
+
+    implementation("com.squareup.retrofit2:retrofit:2.7.1") {
+        transitive(false)
+    }
+
+    implementation("com.squareup.okhttp3:okhttp:3.14.4") {
+        transitive(false)
+    }
+
+    implementation("com.squareup.okio:okio:1.17.2") {
+        transitive(false)
+    }
+
+    implementation("org.jsoup:jsoup:1.12.1") {
+        transitive(false)
+    }
+
+    implementation("org.slf4j:slf4j-api:1.7.26") {
+        transitive(false)
+    }
+
+    implementation("com.squareup.retrofit2:converter-moshi:2.7.1") {
+        transitive(false)
+    }
+
+    implementation("com.squareup.retrofit2:retrofit:2.7.1") {
+        transitive(false)
+    }
+
+    implementation("io.github.resilience4j:resilience4j-circuitbreaker:1.2.0") {
+        transitive(false)
+    }
+
+    implementation("io.vavr:vavr:0.10.0") {
+        transitive(false)
+    }
+
+    implementation("io.vavr:vavr-match:0.10.0") {
+        transitive(false)
+    }
+
+    implementation("io.github.resilience4j:resilience4j-core:1.2.0") {
+        transitive(false)
+    }
+
+    implementation("io.github.resilience4j:resilience4j-retry:1.2.0") {
+        transitive(false)
+    }
+
+    implementation("io.github.resilience4j:resilience4j-retrofit:1.2.0") {
+        transitive(false)
+    }
+
+    implementation("io.github.resilience4j:resilience4j-ratelimiter:1.2.0") {
+        transitive(false)
+    }
+
+    compile("com.github.TheRandomLabs:CurseAPI:master-SNAPSHOT") {
+        transitive(false)
+    }
+
+    compile("com.github.TheRandomLabs:CurseAPI-Minecraft:master-SNAPSHOT") {
+        transitive(false)
+    }
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
+shadowJar {
+    classifier = ''
+
+    dependencies {
+        exclude(dependency {
+            (it.moduleGroup != 'com.github.TheRandomLabs'
+            && it.moduleGroup != 'io.github.resilience4j'
+            && it.moduleGroup != 'io.vavr'
+            && it.moduleGroup != 'com.squareup.okhttp3'
+            && it.moduleGroup != 'com.squareup.retrofit2'
+            && it.moduleGroup != 'com.squareup.okio'
+            && it.moduleGroup != 'com.squareup.moshi'
+            && it.moduleGroup != 'org.slf4j'
+            && it.moduleGroup != 'org.jsoup'
+            )
+        })
+    }
+    exclude 'META-INF/maven/**'
+    exclude 'META-INF/proguard/**'
+    exclude 'META-INF/versions/**'
+    exclude 'META-INF/CHANGES' //THE JAR IS SO FAT
+    exclude 'META-INF/README.md'
+    exclude 'META-INF/retrofit.kotlin_module'
+}
+
 jar {
     manifest {
         attributes([
-            "Specification-Title": "examplemod",
-            "Specification-Vendor": "examplemodsareus",
-            "Specification-Version": "1", // We are version 1 of ourselves
+            "Specification-Title": "modpackutils",
+            "Specification-Vendor": "marcus8448",
+            "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Vendor": "marcus8448",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
         ])
-    }
-}
-
-// Example configuration to allow publishing using the maven-publish task
-// we define a custom artifact that is sourced from the reobfJar output task
-// and then declare that to be published
-// Note you'll need to add a repository here
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact reobfArtifact
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
     }
 }

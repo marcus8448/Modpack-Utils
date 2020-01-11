@@ -2,23 +2,21 @@ modLoader="javafml"
 loaderVersion="[28,)"
 issueTrackerURL="https://github.com/marcus8448/Pack-Utils/issues"
 [[mods]]
-modId="packversionutils"
-version="${file.jarVersion}"
-displayName="Pack Version Utils"
-#updateJSONURL="http://myurl.me/"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/pack-version-utils"
-#logoFile="examplemod.png"
+modId="modpackutils"
+version="1.14.4-1.0.0.0"
+displayName="Modpack Utils"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/modpack-utils"
 authors="marcus8448"
 description='''
 Misc utils for pack authors
 '''
-[[dependencies.examplemod]]
+[[dependencies.modpackutils]]
     modId="forge"
     mandatory=true
     versionRange="[28,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.examplemod]]
+[[dependencies.modpackutils]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.14.4]"

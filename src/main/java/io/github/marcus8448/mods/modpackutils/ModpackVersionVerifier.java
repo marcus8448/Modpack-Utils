@@ -1,5 +1,5 @@
 /*
- * Pack Version Utils
+ * Modpack Utils
  * Copyright (C) 2019-2020 marcus8448
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,19 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.marcus8448.mods.packversionutils;
+package io.github.marcus8448.mods.modpackutils;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
-class PackVersionVerifier {
-    private static final String PROTOCOL_VERSION = PackVersionUtilsConfig.COMMON.packVersion.get() + "-" + PackVersionUtilsConfig.COMMON.packName.get();
+@SuppressWarnings("unused")
+class ModpackVersionVerifier {
+    private static final String PROTOCOL_VERSION = ModpackUtilsConfig.COMMON.packVersion.get() + "-" + ModpackUtilsConfig.COMMON.packName.get();
 
     private static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation("packversionutils", "pack_verification"),
+            new ResourceLocation("modpackutils", "pack_verification"),
             () -> PROTOCOL_VERSION,
-            PackVersionVerifier::checkVersion,
+            ModpackVersionVerifier::checkVersion,
             PROTOCOL_VERSION::equals
     );
 
@@ -39,7 +40,7 @@ class PackVersionVerifier {
         if (PROTOCOL_VERSION.equals(to)) {
             return true;
         } else {
-            PackVersionUtils.LOGGER.fatal("Attempted to join server with pack version: {}. But, this client is on {}. This will not work!", to, PROTOCOL_VERSION);
+            ModpackUtils.LOGGER.fatal("Attempted to join server with pack version: {}. But, this client is on {}. This will not work!", to, PROTOCOL_VERSION);
             return false;
         }
     }

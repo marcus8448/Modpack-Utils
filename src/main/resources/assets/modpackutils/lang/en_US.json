@@ -1,0 +1,12 @@
+{
+  "modpackutils.config.info.name": "Set this to the name of your modpack",
+  "modpackutils.config.info.version": "Set this to your modpacks current version",
+  "modpackutils.config.info.id": "Set this to your modpacks ID (the number)",
+  "modpackutils.config.optional.compare_pack": "If you turn this on, this mod will download the pack manifest (based off of your pack ID and version).\nThe file is downloaded once at startup, and not downloaded ever again (unless it's deleted).\nThis can be useful for determining the verifiability of the pack in bug reports",
+  "modpackutils.config.optional.update.enable": "Set this to true if you want to be reminded when the modpack has a new update",
+  "modpackutils.config.optional.update.beta": "Set this to true if you want to be reminded for Beta modpack updates too (requires updateReminder to be true)",
+  "modpackutils.config.optional.update.alpha": "Set this to true if you want to be reminded for Alpha modpack updates too (requires updateReminder to be true)",
+  "modpackutils.config.optional.checkLoc": "Where to check for the version on curseforge. 'FILE_NAME' will check the downloaded file's name ex. PackName-1.0.0.zip,\nwhile `DISPLAY_NAME' will check the set name ex 'Pack Name v1.0.0'",
+  "modpackutils.config.optional.version_separator": "What separates the pack name from the pack version. ex. 'PackName-1.1.2.3.4' or 'P]a[ck_+N1a4me-1.0.0' (the '-' is the separator) or 'PackName - 1.0.0' if ' - ' is the separator.\nThis will automatically assume that there is only ONE '-' and the version comes AFTER the dash. '(So, Pack-Name-1.0.0' and '1.0.0-PackName' would be invalid)",
+  "modpackutils.message.new_update": "Currently running %s (CF ID: %s), version %s. Latest is %s!"
+}
